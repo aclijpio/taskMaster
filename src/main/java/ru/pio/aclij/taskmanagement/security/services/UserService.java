@@ -1,14 +1,17 @@
-package ru.pio.aclij.taskmanagement.security.services.properties;
+package ru.pio.aclij.taskmanagement.security.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import ru.pio.aclij.taskmanagement.security.dtos.RegistrationUserDto;
 import ru.pio.aclij.taskmanagement.security.entities.User;
+import ru.pio.aclij.taskmanagement.security.exceptions.UserNotFoundException;
 import ru.pio.aclij.taskmanagement.security.repositories.UserRepository;
-import ru.pio.aclij.taskmanagement.security.services.RoleService;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -23,9 +26,20 @@ public class UserService implements UserDetailsService {
         User user = this.repository.findByUsername(username)
                 .orElseThrow(UserNotFoundException::new);
 
-        return org.springframework.security.core.userdetails.User.builder()
-                .username(user.getUsername())
-                .password(user.getPassword())
+        return new org.springframework.security.core.userdetails.User(
+                user.getUsername(),
+                user.getPassword(),
+                user.getRoles().stream()
+                        .map(role -> new SimpleGrantedAuthority(role.getName())).toList()
+        );
+    }
+    public User createNewUser(RegistrationUserDto registrationUserDto){
+        User user = User.builder()
+                .username(registrationUserDto.getUsername())
+                .password(encoder.encode(registrationUserDto.getPassword()))
+                .roles(List.of(roleService.getDefaultRole()))
                 .build();
+        repository.save(user);
+        return user;
     }
 }

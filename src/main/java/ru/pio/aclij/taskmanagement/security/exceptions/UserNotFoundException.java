@@ -1,4 +1,4 @@
-package ru.pio.aclij.taskmanagement.security.services.properties;
+package ru.pio.aclij.taskmanagement.security.exceptions;
 
 import lombok.experimental.StandardException;
 

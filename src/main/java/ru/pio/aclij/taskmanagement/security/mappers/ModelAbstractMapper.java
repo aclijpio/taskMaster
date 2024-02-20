@@ -10,7 +10,6 @@ public abstract class ModelAbstractMapper <MODEL, DTO> {
     MODEL toModel(DTO dto) {
         return null;
     }
-
     List<DTO> toListDto(List<MODEL> models) {
         return null;
     }

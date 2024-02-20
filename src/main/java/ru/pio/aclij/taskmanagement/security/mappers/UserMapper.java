@@ -1,10 +1,11 @@
 package ru.pio.aclij.taskmanagement.security.mappers;
 
+import org.springframework.stereotype.Component;
 import ru.pio.aclij.taskmanagement.security.dtos.UserDto;
 import ru.pio.aclij.taskmanagement.security.entities.User;
 
 import java.util.List;
-
+@Component
 public final class UserMapper extends ModelAbstractMapper<User, UserDto> {
     @Override
     public UserDto toDto(User user) {
@@ -13,7 +14,6 @@ public final class UserMapper extends ModelAbstractMapper<User, UserDto> {
                 .username(user.getUsername())
                 .build();
     }
-
 
     @Override
     List<User> toListModel(List<UserDto> userDtos) {
