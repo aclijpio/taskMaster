@@ -15,19 +15,36 @@ import java.util.List;
 @RequestMapping("/tasks")
 public class TaskController {
     private final TaskService service;
-    @GetMapping
-    @ResponseStatus(HttpStatus.FOUND)
-
-    private ResponseEntity<List<TaskDto>> getTasks(){
-        return ResponseEntity.ok(
-                service.getAllTasks()
-        );
-    }
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.FOUND)
     private ResponseEntity<TaskDto> getTaskById(@PathVariable("id") int id){
         return ResponseEntity.ok(
-                service.getTasksById(id)
+                service.getTaskById(id)
         );
     }
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.FOUND)
+    private List<TaskDto> getTasks(@RequestParam(name = "completed", required = false) boolean completed ){
+        return  service.getAllTasks(completed);
+    }
+
+    @GetMapping("/forToday")
+    @ResponseStatus(HttpStatus.FOUND)
+    private List<TaskDto> getTasksForToday(@RequestParam(name = "completed", required = false) Boolean completed){
+        return service.getTasksForToday(completed);
+    }
+
+    @GetMapping("/forWeek")
+    @ResponseStatus(HttpStatus.FOUND)
+    private List<TaskDto> getTasksForWeek(@RequestParam(name = "completed", required = false) Boolean completed){
+        return service.getTasksWeek(completed);
+    }
+
+    @GetMapping("/forMonth")
+    @ResponseStatus(HttpStatus.FOUND)
+    private List<TaskDto> getTasksForMonth(@RequestParam(name = "completed", required = false) Boolean completed){
+        return service.getTasksForMonth(completed);
+    }
+
 }

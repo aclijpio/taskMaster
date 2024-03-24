@@ -13,4 +13,4 @@ COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
 COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app
 
 
-ENTRYPOINT ["java","-cp","app:app/lib/*", "ru.pio.aclij.configserver.ConfigserverApplication"]
+ENTRYPOINT ["java","-cp","app:app/lib/*", "ru.pio.aclij.taskmanagement.TaskManagementApplication"]
