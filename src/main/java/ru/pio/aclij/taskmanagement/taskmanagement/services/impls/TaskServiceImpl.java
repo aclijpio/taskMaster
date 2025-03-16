@@ -61,7 +61,7 @@ public class TaskServiceImpl implements TaskService {
         LocalDate endDate = startDate.plusMonths(1);
         return getTasksByDateRange(startDate, endDate, completed);
     }
-
+    @Transactional
     public void deleteTask(Long id) {
         if (!repository.existsById(id)) {
             throw new TaskNotFoundException(
@@ -70,6 +70,7 @@ public class TaskServiceImpl implements TaskService {
         }
         repository.deleteById(id);
     }
+    @Transactional
     public void updateTask(TaskDto taskDto){
         Task existingTask = repository.findById(taskDto.getId())
                 .orElseThrow(() -> new TaskNotFoundException(
