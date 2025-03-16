@@ -93,4 +93,11 @@ public class TaskServiceImpl implements TaskService {
             );
         }
     }
+    @Transactional
+    public void updateTaskCompletedStatus(Long id, Boolean completed){
+        Task task = repository.findById(id)
+                .orElseThrow(() -> new TaskNotFoundException("Task with id " + id + " not found."));
+        task.setCompleted(completed);
+        repository.save(task);
+    }
 }

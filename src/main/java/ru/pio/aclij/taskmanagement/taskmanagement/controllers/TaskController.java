@@ -53,4 +53,9 @@ public class TaskController {
         service.deleteTask(id);
         return ResponseEntity.noContent().build();
     }
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<Void> updateCompletedStatus(@PathVariable Long id, @RequestParam(name = "completed") Boolean completed) {
+        service.updateTaskCompletedStatus(id, completed);
+        return ResponseEntity.ok().build();
+    }
 }
