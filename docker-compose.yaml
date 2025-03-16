@@ -1,0 +1,10 @@
+
+services:
+  postgres:
+    image: 'postgres:latest'
+    environment:
+      - POSTGRES_DB=taskMaster
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+    ports:
+      - '5435:5432'

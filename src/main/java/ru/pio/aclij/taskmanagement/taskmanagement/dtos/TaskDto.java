@@ -1,4 +1,4 @@
-package ru.pio.aclij.taskmanagement.taskmanagement.services.dtos;
+package ru.pio.aclij.taskmanagement.taskmanagement.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,9 +10,9 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 public class TaskDto{
-    private long id;
+    private Long id;
     private String name;
     private String description;
     private LocalDate date;
-    private boolean completed;
+    private Boolean completed;
 }

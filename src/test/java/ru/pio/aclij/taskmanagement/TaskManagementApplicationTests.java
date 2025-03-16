@@ -9,11 +9,12 @@ import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import ru.pio.aclij.taskmanagement.taskmanagement.dtos.TaskDto;
 import ru.pio.aclij.taskmanagement.taskmanagement.entities.Task;
 import ru.pio.aclij.taskmanagement.taskmanagement.exceptions.TaskNotFoundException;
+import ru.pio.aclij.taskmanagement.taskmanagement.mappers.TaskMapperImpl;
 import ru.pio.aclij.taskmanagement.taskmanagement.repositories.TaskRepository;
-import ru.pio.aclij.taskmanagement.taskmanagement.services.TaskService;
-import ru.pio.aclij.taskmanagement.taskmanagement.services.dtos.TaskDto;
+import ru.pio.aclij.taskmanagement.taskmanagement.services.impls.TaskServiceImpl;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -24,7 +25,7 @@ import java.util.List;
 class TaskManagementApplicationTests {
     @Autowired
     private TaskRepository repository;
-    private TaskService service;
+    private TaskServiceImpl service;
 
     @Container
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(
@@ -65,7 +66,7 @@ class TaskManagementApplicationTests {
     @BeforeEach
     void setUp() {
 
-        this.service = new TaskService(repository);
+        this.service = new TaskServiceImpl(repository, new TaskMapperImpl());
         this.repository.saveAll(tasks);
 
     }
@@ -114,9 +115,6 @@ class TaskManagementApplicationTests {
         Assertions.assertEquals(dtos.size(), 5);
     }
 
-    /*Задача не найдена, исключение перехвачено
-        глобальным контроллером ExceptionsController,
-         который вернет ResponseEntity с исключением")*/
     @Test
     void getById_not() {
         Assertions.assertThrows(TaskNotFoundException.class, () -> {

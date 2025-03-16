@@ -5,8 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.pio.aclij.taskmanagement.taskmanagement.dtos.TaskDto;
 import ru.pio.aclij.taskmanagement.taskmanagement.services.TaskService;
-import ru.pio.aclij.taskmanagement.taskmanagement.services.dtos.TaskDto;
 
 import java.util.List;
 
@@ -16,35 +16,41 @@ import java.util.List;
 public class TaskController {
     private final TaskService service;
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.FOUND)
-    private ResponseEntity<TaskDto> getTaskById(@PathVariable("id") int id){
+    public ResponseEntity<TaskDto> getTaskById(@PathVariable("id") int id){
         return ResponseEntity.ok(
                 service.getTaskById(id)
         );
     }
-
     @GetMapping
-    @ResponseStatus(HttpStatus.FOUND)
-    private List<TaskDto> getTasks(@RequestParam(name = "completed", required = false) boolean completed ){
+    public List<TaskDto> getTasks(@RequestParam(name = "completed", required = false) Boolean completed ){
         return  service.getAllTasks(completed);
     }
-
     @GetMapping("/forToday")
-    @ResponseStatus(HttpStatus.FOUND)
-    private List<TaskDto> getTasksForToday(@RequestParam(name = "completed", required = false) Boolean completed){
+    public List<TaskDto> getTasksForToday(@RequestParam(name = "completed", required = false) Boolean completed){
         return service.getTasksForToday(completed);
     }
-
     @GetMapping("/forWeek")
-    @ResponseStatus(HttpStatus.FOUND)
-    private List<TaskDto> getTasksForWeek(@RequestParam(name = "completed", required = false) Boolean completed){
+    public List<TaskDto> getTasksForWeek(@RequestParam(name = "completed", required = false) Boolean completed){
         return service.getTasksWeek(completed);
     }
-
     @GetMapping("/forMonth")
-    @ResponseStatus(HttpStatus.FOUND)
-    private List<TaskDto> getTasksForMonth(@RequestParam(name = "completed", required = false) Boolean completed){
+    public List<TaskDto> getTasksForMonth(@RequestParam(name = "completed", required = false) Boolean completed){
         return service.getTasksForMonth(completed);
     }
-
+    @PostMapping
+    public ResponseEntity<TaskDto> createTask(@RequestBody TaskDto taskDto) {
+        TaskDto savedDto  = service.createTask(taskDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedDto);
+    }
+    @PutMapping("/{id}")
+    public ResponseEntity<TaskDto> updateTask(@PathVariable Long id, @RequestBody TaskDto taskDto) {
+        taskDto.setId(id);
+        service.updateTask(taskDto);
+        return ResponseEntity.ok(taskDto);
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
+        service.deleteTask(id);
+        return ResponseEntity.noContent().build();
+    }
 }
